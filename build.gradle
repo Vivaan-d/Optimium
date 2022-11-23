@@ -6,7 +6,7 @@ plugins {
 sourceCompatibility = "17"
 targetCompatibility = "17"
 
-archivesBaseName = "${project.archives_base_name}-${project.minecraft_version}-build-1"
+archivesBaseName = "${project.archives_base_name}-for-${project.minecraft_version}-build1"
 version = "${project.mod_version}+${project.minecraft_version}"
 group = project.maven_group
 

@@ -2,6 +2,7 @@
   "schemaVersion": 1,
   "id": "optimium",
   "version": "${version}",
+  "minecraft_version": "1.19.2",
   "name": "Optimium",
   "description": "Fork of the optimization mod Sodium to work on samsung fridges, toasters and potatoes. Basically not looks-good but very optimized. I wouldn't call this a mod in early stages. Origional mod by JellySquid",
   "authors": [
@@ -38,6 +39,7 @@
   "breaks": {
     "optifabric": "*",
     "canvas": "*",
-    "sodium": "*"
+    "sodium": "*",
+    "iris": "*"
   }
 }

@@ -46,6 +46,7 @@ public class MixinBlockModelRenderer {
     /**
      * @reason Use optimized vertex writer intrinsics, avoid allocations
      * @author JellySquid
+     * @modifiedby VivaanMC
      */
     @Overwrite
     public void render(MatrixStack.Entry entry, VertexConsumer vertexConsumer, BlockState blockState, BakedModel bakedModel, float red, float green, float blue, int light, int overlay) {
