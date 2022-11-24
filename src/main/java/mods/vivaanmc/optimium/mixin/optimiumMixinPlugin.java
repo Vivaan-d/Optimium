@@ -16,7 +16,7 @@ import java.util.Set;
 public class optimiumMixinPlugin implements IMixinConfigPlugin {
     private static final String MIXIN_PACKAGE_ROOT = "mods.vivaanmc.optimium.mixin.";
 
-    private final Logger logger = LogManager.getLogger("optimium");
+    private final Logger logger = LogManager.getLogger("Optimium");
     private optimiumConfig config;
 
     @Override

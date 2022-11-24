@@ -6,8 +6,8 @@ plugins {
 sourceCompatibility = "17"
 targetCompatibility = "17"
 
-archivesBaseName = "${project.archives_base_name}-for-${project.minecraft_version}-build9"
-version = "${project.mod_version}+${project.minecraft_version}"
+archivesBaseName = "${project.archives_base_name}-for-${project.minecraft_version}-build-20"
+version = "${project.mod_version}+${project.minecraft_version}-build-20"
 group = project.maven_group
 
 loom {
