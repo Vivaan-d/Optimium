@@ -1,17 +1,17 @@
 plugins {
-    id 'fabric-loom' version '0.12-SNAPSHOT'
+    id 'fabric-loom' version '1.0-SNAPSHOT'
     id 'org.ajoberstar.grgit' version '4.1.0'
 }
 
 sourceCompatibility = "17"
 targetCompatibility = "17"
 
-archivesBaseName = "${project.archives_base_name}-for-${project.minecraft_version}-build1"
+archivesBaseName = "${project.archives_base_name}-for-${project.minecraft_version}-build9"
 version = "${project.mod_version}+${project.minecraft_version}"
 group = project.maven_group
 
 loom {
-    mixin.defaultRefmapName = "mixins.sodium.refmap.json"
+    mixin.defaultRefmapName = "mixins.optimium.refmap.json"
     accessWidenerPath = file("src/main/resources/optimium.accesswidener")
 }
 

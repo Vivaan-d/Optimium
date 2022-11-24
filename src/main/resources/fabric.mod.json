@@ -4,7 +4,7 @@
   "version": "${version}",
   "minecraft_version": "1.19.2",
   "name": "Optimium",
-  "description": "Fork of the optimization mod Sodium to work on samsung fridges, toasters and potatoes. Basically not looks-good but very optimized. I wouldn't call this a mod in early stages. Origional mod by JellySquid",
+  "description": "Fork of the optimization mod Sodium to work on low-end laptops/pcs. Basically not looks-good but very optimized. Original mod by JellySquid",
   "authors": [
     "VivaanMC"
   ],
@@ -14,14 +14,14 @@
     "issues": "https://github.com/Vivaan-d/optimium/issues"
   },
   "license": "LGPL-3.0-only",
-  "icon": "assets/sodium/icon.png",
+  "icon": "assets/optimium/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
-      "me.jellysquid.mods.sodium.client.SodiumClientMod"
+      "mods.vivaanmc.optimium.client.optimiumClientMod"
     ],
     "preLaunch": [
-      "me.jellysquid.mods.sodium.client.SodiumPreLaunch"
+      "mods.vivaanmc.optimium.client.optimiumPreLaunch"
     ]
   },
   "custom": {
@@ -29,17 +29,19 @@
   },
   "accessWidener": "optimium.accesswidener",
   "mixins": [
-    "sodium.mixins.json"
+    "optimium.mixins.json"
   ],
   "depends": {
+    "fabric-api": "*",
     "fabricloader": ">=0.12.0",
-    "fabric-rendering-data-attachment-v1": ">=0.1",
-    "fabric-rendering-fluids-v1": ">=0.1"
+    "optimium": "*"
   },
   "breaks": {
     "optifabric": "*",
     "canvas": "*",
     "sodium": "*",
-    "iris": "*"
+    "iris": "*",
+    "reeses-sodium-options": "*",
+    "sodium-extras": "*"
   }
 }

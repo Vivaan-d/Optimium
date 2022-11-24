@@ -1,0 +1,99 @@
+package mods.vivaanmc.optimium.mixin.features.item;
+
+import mods.vivaanmc.optimium.client.model.quad.ModelQuadView;
+import mods.vivaanmc.optimium.client.model.vertex.VanillaVertexTypes;
+import mods.vivaanmc.optimium.client.model.vertex.VertexDrain;
+import mods.vivaanmc.optimium.client.model.vertex.formats.quad.QuadVertexSink;
+import mods.vivaanmc.optimium.client.render.texture.SpriteUtil;
+import mods.vivaanmc.optimium.client.util.ModelQuadUtil;
+import mods.vivaanmc.optimium.client.util.color.ColorARGB;
+import mods.vivaanmc.optimium.client.world.biome.ItemColorsExtended;
+import mods.vivaanmc.optimium.common.util.DirectionUtil;
+import net.minecraft.client.color.item.ItemColorProvider;
+import net.minecraft.client.color.item.ItemColors;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.item.ItemRenderer;
+import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.model.BakedQuad;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Xoroshiro128PlusPlusRandom;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.Shadow;
+
+import java.util.List;
+
+@Mixin(ItemRenderer.class)
+public class MixinItemRenderer {
+    private final Xoroshiro128PlusPlusRandom random = new Xoroshiro128PlusPlusRandom(42L);
+
+    @Shadow
+    @Final
+    private ItemColors colors;
+
+    /**
+     * @reason Avoid allocations
+     * @author JellySquid
+     */
+    @Overwrite
+    private void renderBakedItemModel(BakedModel model, ItemStack stack, int light, int overlay, MatrixStack matrices, VertexConsumer vertices) {
+        Xoroshiro128PlusPlusRandom random = this.random;
+
+        for (Direction direction : DirectionUtil.ALL_DIRECTIONS) {
+            random.setSeed(42L);
+            List<BakedQuad> quads = model.getQuads(null, direction, random);
+
+            if (!quads.isEmpty()) {
+                this.renderBakedItemQuads(matrices, vertices, quads, stack, light, overlay);
+            }
+        }
+
+        random.setSeed(42L);
+        List<BakedQuad> quads = model.getQuads(null, null, random);
+
+        if (!quads.isEmpty()) {
+            this.renderBakedItemQuads(matrices, vertices, quads, stack, light, overlay);
+        }
+    }
+
+    /**
+     * @reason Use vertex building intrinsics
+     * @author JellySquid
+     */
+    @Overwrite
+    private void renderBakedItemQuads(MatrixStack matrices, VertexConsumer vertexConsumer, List<BakedQuad> quads, ItemStack stack, int light, int overlay) {
+        MatrixStack.Entry entry = matrices.peek();
+
+        ItemColorProvider colorProvider = null;
+
+        QuadVertexSink drain = VertexDrain.of(vertexConsumer)
+                .createSink(VanillaVertexTypes.QUADS);
+        drain.ensureCapacity(quads.size() * 4);
+
+        for (BakedQuad bakedQuad : quads) {
+            int color = 0xFFFFFFFF;
+
+            if (!stack.isEmpty() && bakedQuad.hasColor()) {
+                if (colorProvider == null) {
+                    colorProvider = ((ItemColorsExtended) this.colors).getColorProvider(stack);
+                }
+
+                color = ColorARGB.toABGR((colorProvider.getColor(stack, bakedQuad.getColorIndex())), 255);
+            }
+
+            ModelQuadView quad = ((ModelQuadView) bakedQuad);
+
+            for (int i = 0; i < 4; i++) {
+                drain.writeQuad(entry, quad.getX(i), quad.getY(i), quad.getZ(i), color, quad.getTexU(i), quad.getTexV(i),
+                        light, overlay, ModelQuadUtil.getFacingNormal(bakedQuad.getFace()));
+            }
+
+            SpriteUtil.markSpriteActive(quad.getSprite());
+        }
+
+        drain.flush();
+    }
+}
